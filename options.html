@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Options</title>
+    <style>
+        /*000022 001242 0094C6 ; oxford_blue penn_blue blue*/
+        body{
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            background-color: #000022;
+        }
+        #contacts{
+            background-color: #040F16;
+            padding: 0 10px;
+            font-weight: 700;
+            color: #fff;
+            /*border: #fff solid 1px;*/
+        }
+        #header-elements{
+            padding: 0% 5%;
+            /* background-color: yellowgreen; */
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            /*border: #fff solid 1px;*/
+            border-bottom: #fff solid 1px;
+        }
+        #logo-cont{
+            color:#fff;
+            /*border: #fff solid 1px;*/
+            /* color: #001242; */
+           
+        }
+        #personalise-cont{
+            display: flex;
+            justify-content: space-between;
+            width: fit-content;
+            padding: 10px;
+            /* background-color: blueviolet; */
+            /*border: #fff solid 1px;*/
+            height: 100%;
+            width: 40%;
+            align-items: baseline;
+        }
+        .buttons{
+            width: fit-content;
+            background-color:#005E7C;
+            color: #fff;
+            padding: 10px;
+            outline: none;
+            border: none;
+            border-radius: 5%;
+        }
+        #search-bar-cont{
+            width: 85%;
+            display: flex;
+            justify-content: center;
+        }
+        #search-query{
+            padding: 9px 5px;
+            width: 70%;
+        }
+        .page-title{
+            color: #fff;
+        }
+
+        #main-cont{
+            /*border: #fff solid 1px;*/
+            /* background-color: brown; */
+            margin-top: 6vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: fit-content;
+        }
+        #page-items{
+            display: flex;
+            flex-direction: column;
+        }
+        .page-item{
+            background-color: #0094C6;
+            padding: 10px 5px 10px 20px;
+            margin: 5px 0px;
+            width: 100%;
+            color: #fff;
+        }
+
+        @media screen and (max-width: 600px) {
+           #header-elements{
+            display: flex;
+            flex-direction: column;
+            /* justify-content: space-between; */
+            /* align-items: baseline; */
+            border: none;
+           }
+           #logo-cont{
+            /* border: #fff solid 1px; */
+            font-size: 70%;
+            width: fit-content;
+            margin: auto;
+            
+           }
+           #personalise-cont{
+            display: flex;
+            /* flex-direction: column; */
+            width: 100%;
+            padding: 1px;
+            /* background-color: blueviolet; */
+            /* border: #fff solid 1px; */
+            height: 100%;
+            /* width: 40%; */
+            align-items: center;
+            margin: auto;
+        }
+        #main-cont{
+            font-size: 90%;
+        }
+        }
+            
+        
+
+    </style>
+</head>
+<body>
+    <div id="contacts">
+        <p>CONTACT US: +250728043519</p>
+    </div>
+    <div id="header-elements">
+        <div id="logo-cont"><h1>IBICUPULI</h1></div>
+        <div id="personalise-cont">
+            <div id="filter-button-cont">
+                <button class="buttons" id="filter-button">Filter</button>
+            </div>
+            <div id="search-bar-cont">
+                <input type="text" id="search-query">
+                <button class="buttons" id="search-button">Search</button>
+            </div>
+        </div>
+    </div>
+    <div id="main-cont">
+        <div class="page-title-cont">
+            <h2 class="page-title">OPTIONS</h2>
+        </div>
+        <div id="page-items">
+            <div class="page-item">
+                MECHATRONICS
+            </div>
+            <div class="page-item">
+                MANUFACTURING TECHNOLOGY
+            </div>
+            <div class="page-item">
+                AUTOMOBILE TECHNOLOGY
+            </div>
+            <div class="page-item">
+                HVAC TECHNOLOGY
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    getOptions();
+    function getOptions(){
+        const link = sessionStorage.getItem('departmentLink')
+        const url = `http://127.0.0.1:8000/folders/${link}`
+        const options = {
+            method:"GET"
+        }
+        fetch(url,options)
+        .then(response=>response.json())
+        .then(data=>{
+            displayOptions(data.data);
+        })
+    }
+
+    function displayOptions(data){
+        const itemsCont = document.getElementById('page-items');
+        itemsCont.innerHTML = "";
+        data.forEach(opt => {
+            const listItem = document.createElement('div');
+            listItem.classList.add("page-item");
+            listItem.innerText = opt.name;
+            console.log(opt.name);
+            itemsCont.appendChild(listItem);
+            listItem.addEventListener("click",(e)=>{
+                e.preventDefault();
+                openFolder(opt);
+            })
+        });
+    }
+
+    function openFolder(opt){
+        sessionStorage.setItem('optionLink',opt.link);
+        sessionStorage.setItem('optionName',opt.name);
+        window.location.href = './years.html'
+    }
+</script>
+</html>
