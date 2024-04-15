@@ -162,6 +162,10 @@
     </div>
 </body>
 <script>
+    const homeBtn = document.getElementById('logo-cont');
+    homeBtn.addEventListener('click',()=>{
+        window.location.href = '../departments.html'
+    })
     getYears();
     function getYears(){
         const link = sessionStorage.getItem('optionLink');

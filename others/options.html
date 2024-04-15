@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Module</title>
+    <title>Options</title>
     <style>
         /*000022 001242 0094C6 ; oxford_blue penn_blue blue*/
         body{
@@ -119,13 +119,6 @@
         #main-cont{
             font-size: 90%;
         }
-        .page-item{
-            background-color: #0094C6;
-            padding: 10px 5px 10px 10px;
-            margin: 5px 0px;
-            width: 100%;
-            color: #fff;
-        }
         }
             
         
@@ -150,31 +143,32 @@
     </div>
     <div id="main-cont">
         <div class="page-title-cont">
-            <h2 class="page-title">Files</h2>
+            <h2 class="page-title">OPTIONS</h2>
         </div>
         <div id="page-items">
             <div class="page-item">
-                CAT 1
+                MECHATRONICS
             </div>
             <div class="page-item">
-                CAT 2
+                MANUFACTURING TECHNOLOGY
             </div>
             <div class="page-item">
-                CAT 3
+                AUTOMOBILE TECHNOLOGY
             </div>
-            
+            <div class="page-item">
+                HVAC TECHNOLOGY
+            </div>
         </div>
     </div>
 </body>
 <script>
     const homeBtn = document.getElementById('logo-cont');
     homeBtn.addEventListener('click',()=>{
-        window.location.href = './departments.html'
+        window.location.href = '../departments.html'
     })
-
-    getFiles();
-    function getFiles(){
-        const link = sessionStorage.getItem('moduleLink');
+    getOptions();
+    function getOptions(){
+        const link = sessionStorage.getItem('departmentLink')
         const url = `http://127.0.0.1:8000/folders/${link}`
         const options = {
             method:"GET"
@@ -182,31 +176,30 @@
         fetch(url,options)
         .then(response=>response.json())
         .then(data=>{
-            displayFiles(data.data);
+            displayOptions(data.data);
         })
     }
 
-    function displayFiles(data){
+    function displayOptions(data){
         const itemsCont = document.getElementById('page-items');
         itemsCont.innerHTML = "";
-        data.forEach(fl => {
+        data.forEach(opt => {
             const listItem = document.createElement('div');
             listItem.classList.add("page-item");
-            listItem.innerText = fl.name;
-            console.log(fl.name);
+            listItem.innerText = opt.name;
+            console.log(opt.name);
             itemsCont.appendChild(listItem);
             listItem.addEventListener("click",(e)=>{
                 e.preventDefault();
-                const fileUrl = `https://drive.google.com/file/d/${fl.link}/view`;
-                window.open(fileUrl,'_blank');
+                openFolder(opt);
             })
         });
     }
 
-    // function openFolder(yr){
-    //     sessionStorage.setItem('yearLink',yr.link);
-    //     sessionStorage.setItem('yearName',yr.name);
-    //     window.location.href = './modules.html'
-    // }
+    function openFolder(opt){
+        sessionStorage.setItem('optionLink',opt.link);
+        sessionStorage.setItem('optionName',opt.name);
+        window.location.href = './years.html'
+    }
 </script>
 </html>

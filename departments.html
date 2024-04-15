@@ -162,6 +162,10 @@
     </div>
 </body>
 <script>
+    const homeBtn = document.getElementById('logo-cont');
+    homeBtn.addEventListener('click',()=>{
+        window.location.href = '../departments.html'
+    })
     getDepartments();
     function getDepartments(){
         const url = 'http://127.0.0.1:8000/departments'
@@ -195,7 +199,7 @@
     function openFolder(dpt){
         sessionStorage.setItem('departmentLink',dpt.link);
         sessionStorage.setItem('departmentName',dpt.name);
-        window.location.href = './options.html'
+        window.location.href = './others/options.html'
     }
 </script>
 </html>

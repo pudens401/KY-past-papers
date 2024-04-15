@@ -121,7 +121,7 @@
         }
         .page-item{
             background-color: #0094C6;
-            padding: 10px 5px 10px 5px;
+            padding: 10px 5px 10px 10px;
             margin: 5px 0px;
             width: 100%;
             color: #fff;
@@ -150,37 +150,31 @@
     </div>
     <div id="main-cont">
         <div class="page-title-cont">
-            <h2 class="page-title">MODULES</h2>
+            <h2 class="page-title">Files</h2>
         </div>
         <div id="page-items">
             <div class="page-item">
-                MCTEM601: Engineering Mechanics
+                CAT 1
             </div>
             <div class="page-item">
-                MCTDE601: Digital Electronics
+                CAT 2
             </div>
             <div class="page-item">
-                MCTAE601: Analog Electronics
+                CAT 3
             </div>
-            <div class="page-item">
-                MCTBP601: Basic Physics
-            </div>
-            <div class="page-item">
-                MCTPM601: Mechanical CAD
-            </div>
-            <div class="page-item">
-                MCTAPH601: Hydraulics & Pneumatics
-            </div>
-            <div class="page-item">
-                MCTMT601: Machine Tools
-            </div>
+            
         </div>
     </div>
 </body>
 <script>
-    getModules();
-    function getModules(){
-        const link = sessionStorage.getItem('yearLink');
+    const homeBtn = document.getElementById('logo-cont');
+    homeBtn.addEventListener('click',()=>{
+        window.location.href = '../departments.html'
+    })
+
+    getFiles();
+    function getFiles(){
+        const link = sessionStorage.getItem('moduleLink');
         const url = `http://127.0.0.1:8000/folders/${link}`
         const options = {
             method:"GET"
@@ -188,30 +182,31 @@
         fetch(url,options)
         .then(response=>response.json())
         .then(data=>{
-            displayModules(data.data);
+            displayFiles(data.data);
         })
     }
 
-    function displayModules(data){
+    function displayFiles(data){
         const itemsCont = document.getElementById('page-items');
         itemsCont.innerHTML = "";
-        data.forEach(mod => {
+        data.forEach(fl => {
             const listItem = document.createElement('div');
             listItem.classList.add("page-item");
-            listItem.innerText = mod.name;
-            console.log(mod.name);
+            listItem.innerText = fl.name;
+            console.log(fl.name);
             itemsCont.appendChild(listItem);
             listItem.addEventListener("click",(e)=>{
                 e.preventDefault();
-                openFolder(mod);
+                const fileUrl = `https://drive.google.com/file/d/${fl.link}/view`;
+                window.open(fileUrl,'_blank');
             })
         });
     }
 
-    function openFolder(mod){
-        sessionStorage.setItem('moduleLink',mod.link);
-        sessionStorage.setItem('moduleName',mod.name);
-        window.location.href = './files.html'
-    }
+    // function openFolder(yr){
+    //     sessionStorage.setItem('yearLink',yr.link);
+    //     sessionStorage.setItem('yearName',yr.name);
+    //     window.location.href = './modules.html'
+    // }
 </script>
 </html>

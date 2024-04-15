@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Options</title>
+    <title>Module</title>
     <style>
         /*000022 001242 0094C6 ; oxford_blue penn_blue blue*/
         body{
@@ -119,6 +119,13 @@
         #main-cont{
             font-size: 90%;
         }
+        .page-item{
+            background-color: #0094C6;
+            padding: 10px 5px 10px 5px;
+            margin: 5px 0px;
+            width: 100%;
+            color: #fff;
+        }
         }
             
         
@@ -143,28 +150,41 @@
     </div>
     <div id="main-cont">
         <div class="page-title-cont">
-            <h2 class="page-title">OPTIONS</h2>
+            <h2 class="page-title">MODULES</h2>
         </div>
         <div id="page-items">
             <div class="page-item">
-                MECHATRONICS
+                MCTEM601: Engineering Mechanics
             </div>
             <div class="page-item">
-                MANUFACTURING TECHNOLOGY
+                MCTDE601: Digital Electronics
             </div>
             <div class="page-item">
-                AUTOMOBILE TECHNOLOGY
+                MCTAE601: Analog Electronics
             </div>
             <div class="page-item">
-                HVAC TECHNOLOGY
+                MCTBP601: Basic Physics
+            </div>
+            <div class="page-item">
+                MCTPM601: Mechanical CAD
+            </div>
+            <div class="page-item">
+                MCTAPH601: Hydraulics & Pneumatics
+            </div>
+            <div class="page-item">
+                MCTMT601: Machine Tools
             </div>
         </div>
     </div>
 </body>
 <script>
-    getOptions();
-    function getOptions(){
-        const link = sessionStorage.getItem('departmentLink')
+    const homeBtn = document.getElementById('logo-cont');
+    homeBtn.addEventListener('click',()=>{
+        window.location.href = '../departments.html'
+    })
+    getModules();
+    function getModules(){
+        const link = sessionStorage.getItem('yearLink');
         const url = `http://127.0.0.1:8000/folders/${link}`
         const options = {
             method:"GET"
@@ -172,30 +192,30 @@
         fetch(url,options)
         .then(response=>response.json())
         .then(data=>{
-            displayOptions(data.data);
+            displayModules(data.data);
         })
     }
 
-    function displayOptions(data){
+    function displayModules(data){
         const itemsCont = document.getElementById('page-items');
         itemsCont.innerHTML = "";
-        data.forEach(opt => {
+        data.forEach(mod => {
             const listItem = document.createElement('div');
             listItem.classList.add("page-item");
-            listItem.innerText = opt.name;
-            console.log(opt.name);
+            listItem.innerText = mod.name;
+            console.log(mod.name);
             itemsCont.appendChild(listItem);
             listItem.addEventListener("click",(e)=>{
                 e.preventDefault();
-                openFolder(opt);
+                openFolder(mod);
             })
         });
     }
 
-    function openFolder(opt){
-        sessionStorage.setItem('optionLink',opt.link);
-        sessionStorage.setItem('optionName',opt.name);
-        window.location.href = './years.html'
+    function openFolder(mod){
+        sessionStorage.setItem('moduleLink',mod.link);
+        sessionStorage.setItem('moduleName',mod.name);
+        window.location.href = './files.html'
     }
 </script>
 </html>
