@@ -127,7 +127,29 @@
             color: #fff;
         }
         }
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 10vh;
+            color: #0094C6;
+            }
+        .loading {
+            display: inline-block;
+            width: 2px;
+            height: 2px;
+            border-radius: 50%;
+            border: 2px solid #0094C6;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
             
+            }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+            }     
         
 
     </style>
@@ -151,6 +173,10 @@
     <div id="main-cont">
         <div class="page-title-cont">
             <h2 class="page-title">MODULES</h2>
+        </div>
+        <div class="loading-container">
+            <div class="loading"></div>
+            <p>Loading...</p>
         </div>
         <div id="page-items">
             <div class="page-item">
@@ -178,6 +204,10 @@
     </div>
 </body>
 <script>
+    window.onload = ()=>{
+    const itemsCont = document.getElementById('page-items');
+    itemsCont.style.display = "none" ;
+    }
     const homeBtn = document.getElementById('logo-cont');
     homeBtn.addEventListener('click',()=>{
         window.location.href = '../index.html'
@@ -192,6 +222,8 @@
         fetch(url,options)
         .then(response=>response.json())
         .then(data=>{
+            document.querySelector('.loading-container').style.display = 'none';
+            document.getElementById('page-items').style.display = 'block';
             displayModules(data.data);
         })
     }
