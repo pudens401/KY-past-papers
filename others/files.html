@@ -167,6 +167,7 @@
     </div>
 </body>
 <script>
+
     const homeBtn = document.getElementById('logo-cont');
     homeBtn.addEventListener('click',()=>{
         window.location.href = '../index.html'
@@ -189,6 +190,10 @@
     function displayFiles(data){
         const itemsCont = document.getElementById('page-items');
         itemsCont.innerHTML = "";
+        if(data.length===0){
+            itemsCont.innerText = "NO FILES FOUND"
+            itemsCont.style.color = '#0094C6'
+        }
         data.forEach(fl => {
             const listItem = document.createElement('div');
             listItem.classList.add("page-item");

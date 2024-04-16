@@ -183,6 +183,10 @@
     function displayYears(data){
         const itemsCont = document.getElementById('page-items');
         itemsCont.innerHTML = "";
+        if(data.length===0){
+            itemsCont.innerText = "NO YEARS FOUND"
+            itemsCont.style.color = '#0094C6'
+        }
         data.forEach(yr => {
             const listItem = document.createElement('div');
             listItem.classList.add("page-item");

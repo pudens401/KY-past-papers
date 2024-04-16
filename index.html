@@ -120,48 +120,84 @@
             font-size: 90%;
         }
         }
+
+    .loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  color: #0094C6;
+}
+
+.loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #0094C6;
+  border-top-color: transparent;
+  animation: spin 1s linear infinite;
+  
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
             
         
 
     </style>
 </head>
 <body>
-    <div id="contacts">
-        <p>CONTACT US: +250728043519</p>
+    <div class="loading-container">
+        <div class="loading"></div>
+        <p>Loading...</p>
     </div>
-    <div id="header-elements">
-        <div id="logo-cont"><h1>IBICUPULI</h1></div>
-        <div id="personalise-cont">
-            <div id="filter-button-cont">
-                <button class="buttons" id="filter-button">Filter</button>
-            </div>
-            <div id="search-bar-cont">
-                <input type="text" id="search-query">
-                <button class="buttons" id="search-button">Search</button>
+    <div id="content">
+        <div id="contacts">
+            <p>CONTACT US: +250728043519</p>
+        </div>
+        <div id="header-elements">
+            <div id="logo-cont"><h1>IBICUPULI</h1></div>
+            <div id="personalise-cont">
+                <div id="filter-button-cont">
+                    <button class="buttons" id="filter-button">Filter</button>
+                </div>
+                <div id="search-bar-cont">
+                    <input type="text" id="search-query">
+                    <button class="buttons" id="search-button">Search</button>
+                </div>
             </div>
         </div>
-    </div>
-    <div id="main-cont">
-        <div class="page-title-cont">
-            <h2 class="page-title">DEPARTMENTS</h2>
-        </div>
-        <div id="page-items">
-            <div class="page-item">
-                MECHANICAL ENGINEERING
+        <div id="main-cont">
+            <div class="page-title-cont">
+                <h2 class="page-title">DEPARTMENTS</h2>
             </div>
-            <div class="page-item">
-                IT ENGINEERING
-            </div>
-            <div class="page-item">
-                CIVIL ENGINEERING
-            </div>
-            <div class="page-item">
-                ELECTRONICS ENGINEERING
+            <div id="page-items">
+                <div class="page-item">
+                    MECHANICAL ENGINEERING
+                </div>
+                <div class="page-item">
+                    IT ENGINEERING
+                </div>
+                <div class="page-item">
+                    CIVIL ENGINEERING
+                </div>
+                <div class="page-item">
+                    ELECTRONICS ENGINEERING
+                </div>
             </div>
         </div>
     </div>
 </body>
 <script>
+    const content = document.getElementById('content');
+    window.onload = ()=>{
+        content.style.display = "none" ;
+    }
     const homeBtn = document.getElementById('logo-cont');
     homeBtn.addEventListener('click',()=>{
         window.location.href = '../index.html'
@@ -175,6 +211,8 @@
         fetch(url,options)
         .then(response=>response.json())
         .then(data=>{
+            document.querySelector('.loading-container').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
             displayDepartments(data.data);
         })
     }
