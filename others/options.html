@@ -164,12 +164,12 @@
 <script>
     const homeBtn = document.getElementById('logo-cont');
     homeBtn.addEventListener('click',()=>{
-        window.location.href = '../departments.html'
+        window.location.href = '../index.html'
     })
     getOptions();
     function getOptions(){
         const link = sessionStorage.getItem('departmentLink')
-        const url = `http://127.0.0.1:8000/folders/${link}`
+        const url = `https://past-papers-api.onrender.com/folders/${link}`
         const options = {
             method:"GET"
         }
