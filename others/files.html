@@ -18,30 +18,22 @@
             padding: 0 10px;
             font-weight: 700;
             color: #fff;
-            /*border: #fff solid 1px;*/
         }
         #header-elements{
             padding: 0% 5%;
-            /* background-color: yellowgreen; */
             display: flex;
             justify-content: space-between;
             align-items: baseline;
-            /*border: #fff solid 1px;*/
             border-bottom: #fff solid 1px;
         }
         #logo-cont{
             color:#fff;
-            /*border: #fff solid 1px;*/
-            /* color: #001242; */
-           
         }
         #personalise-cont{
             display: flex;
             justify-content: space-between;
             width: fit-content;
             padding: 10px;
-            /* background-color: blueviolet; */
-            /*border: #fff solid 1px;*/
             height: 100%;
             width: 40%;
             align-items: baseline;
@@ -85,8 +77,6 @@
         }
 
         #main-cont{
-            /*border: #fff solid 1px;*/
-            /* background-color: brown; */
             margin-top: 6vh;
             display: flex;
             flex-direction: column;
@@ -109,12 +99,9 @@
            #header-elements{
             display: flex;
             flex-direction: column;
-            /* justify-content: space-between; */
-            /* align-items: baseline; */
             border: none;
            }
            #logo-cont{
-            /* border: #fff solid 1px; */
             font-size: 70%;
             width: fit-content;
             margin: auto;
@@ -122,13 +109,9 @@
            }
            #personalise-cont{
             display: flex;
-            /* flex-direction: column; */
             width: 100%;
             padding: 1px;
-            /* background-color: blueviolet; */
-            /* border: #fff solid 1px; */
             height: 100%;
-            /* width: 40%; */
             align-items: center;
             margin: auto;
         }
@@ -235,28 +218,24 @@
     })
     let departmentNav = document.getElementById("dpt-nav-btn");
     const dName = sessionStorage.getItem('departmentName');
-    // splitName(departmentName);
     departmentNav.innerText = dName;
     departmentNav.addEventListener('click',()=>{
         window.location.href = "./options.html"
     });
     let optionNav = document.getElementById("opt-nav-btn");
     const optName = sessionStorage.getItem('optionName');
-    // splitName(departmentName);
     optionNav.innerText = optName;
     optionNav.addEventListener('click',()=>{
         window.location.href = "./years.html"
     });
     let yearNav = document.getElementById("yr-nav-btn");
     const yearName = sessionStorage.getItem('yearName');
-    // splitName(departmentName);
     yearNav.innerText = yearName;
     yearNav.addEventListener('click',()=>{
         window.location.href = "./modules.html"
     });
     let moduleNav = document.getElementById("mod-nav-btn");
     const moduleName = sessionStorage.getItem('moduleName');
-    // splitName(departmentName);
     moduleNav.innerText = moduleName.split(':')[0];
     moduleNav.addEventListener('click',()=>{
         window.location.href = "./files.html"
@@ -298,11 +277,5 @@
             })
         });
     }
-
-    // function openFolder(yr){
-    //     sessionStorage.setItem('yearLink',yr.link);
-    //     sessionStorage.setItem('yearName',yr.name);
-    //     window.location.href = './modules.html'
-    // }
 </script>
 </html>
