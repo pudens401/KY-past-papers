@@ -14,13 +14,13 @@
     <div id="header-elements">
         <div id="logo-cont"><h1>IBICUPULI</h1></div>
         <div id="personalise-cont">
-            <div id="filter-button-cont">
-                <button class="buttons" id="filter-button">Filter</button>
-            </div>
             <div id="search-bar-cont">
                 <input type="text" id="search-query">
                 <button class="buttons" id="search-button">Search</button>
             </div>
+            <div id="login-button-cont">
+                <button class="buttons" id="login-button">Login</button>
+            </div> 
         </div>
     </div>
     <div id="main-cont">
@@ -36,7 +36,7 @@
             <span class="nav-menu-btn" id="mod-nav-btn">Module</span>
         </div>
         <div class="page-title-cont">
-            <h2 class="page-title">Files</h2>
+            <h2 class="page-title" id="page-title-1">Files</h2>
         </div>
         <div class="loading-container">
             <div class="loading"></div>
@@ -57,6 +57,22 @@
     </div>
     <div id="add-cont">
         <i class="fa-solid fa-plus"></i>
+    </div>
+    <div class="hidden-form" id="add-file-form-cont">
+        <form action="" name="add-file" id="add-file-form">
+            <p id="cancel">cancel</p>
+            <h3 id="add-header">ADD FILE</h3>
+            <div id="input-wrapper-1">
+                <label for="file-name" id="file-name-label">File name</label>
+                <input type="text" id="file-name">
+            </div>
+            <div id="input-wrapper-1">
+                <label for="file-input" id="file-label">File upload</label>
+                <input type="file" id="file-input">
+            </div>
+            
+            <button id="add-file-btn">Confirm</button>
+        </form>
     </div>
 </body>
 <script>
@@ -133,5 +149,49 @@
             })
         });
     }
+    const addFileForm = document.getElementById("add-file-form-cont");
+    const addFileCont = document.getElementById("add-cont");
+    addFileCont.addEventListener("click",(e)=>{
+        e.preventDefault();
+        addFileForm.style.display = 'block';
+    })
+
+    const cancelBtn = document.getElementById('cancel');
+    const header = document.getElementById('add-header');
+    const pageTitle = document.getElementById('page-title-1');
+    header.textContent = `ADD ${pageTitle.textContent.split('S')[0]}`;
+
+    cancelBtn.addEventListener('click',()=>{
+        addFileForm.style.display = 'none';
+    });
+    const fileNameInput = document.getElementById('file-name');
+    const fileInput = document.getElementById("file-input");
+      
+    const addFileBtn = document.getElementById('add-file-btn');
+    addFileBtn.addEventListener("click",(e)=>{
+        e.preventDefault();
+        fileData = fileInput.files[0];
+        let fileName = fileNameInput.value.trim()?fileNameInput.value.trim():fileData.name;
+        let formData = new FormData();
+        formData.append("file",fileData)
+        formData.append("fileName",fileName)
+        formData.append("folderId",sessionStorage.getItem('moduleLink'))
+        
+        if(fileName&&fileData){
+        const url = 'https://past-papers-api.onrender.com/newFile'
+        const options = {
+            method:"POST",
+            mode:"no-cors",
+            body: formData   
+        }
+        fetch(url,options)
+        .then(response=>response)
+        .then(data=>{
+            alert("File added!");
+            console.log(data);
+            window.location.reload();
+        })
+        }
+    })
 </script>
 </html>

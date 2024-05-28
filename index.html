@@ -19,13 +19,14 @@
         <div id="header-elements">
             <div id="logo-cont"><h1>IBICUPULI</h1></div>
             <div id="personalise-cont">
-                <div id="filter-button-cont">
-                    <button class="buttons" id="filter-button">Filter</button>
-                </div>
                 <div id="search-bar-cont">
                     <input type="text" id="search-query">
                     <button class="buttons" id="search-button">Search</button>
                 </div>
+                <div id="login-button-cont">
+                    <button class="buttons" id="login-button">Login</button>
+                </div>
+                
             </div>
         </div>
         <div id="main-cont">
@@ -58,6 +59,24 @@
                 <label for="folder-name" id="folder-name-label">Folder name</label>
                 <input type="text" id="folder-name">
                 <button id="add-item-btn">Confirm</button>
+            </form>
+        </div>
+
+        <div class="hidden-form" id="login-form-cont">
+            <form action="" name="login-form" id="login-form">
+                <p id="cancel">cancel</p>
+                <h3 id="form-title">LOGIN</h3>
+                <div id="input-wrapper-1">
+                    <label for="user-email" id="user-email-label">Username</label>
+                    <input type="text" id="user-email">
+                </div>
+                <div id="input-wrapper-1">
+                    <label for="user-password" id="user-password-label">Password</label>
+                    <input type="password" id="user-password">
+                </div>
+                <p id="request-account">New here?<span>request account</span></p>
+                <button id="login-btn">Login</button>
+                <p>Forgot password?</p>
             </form>
         </div>
     </div>
@@ -155,6 +174,40 @@
         .then(response=>response.json())
         .then(data=>{
             alert("Department added!");
+            console.log(data);
+            window.location.reload();
+        })
+        }
+    })
+
+    
+    const userEmailInput = document.getElementById('user-email');
+    const userPasswordInput = document.getElementById('user-password');
+    const loginBtn = document.getElementById('login-btn');
+    loginBtn.addEventListener("click",(e)=>{
+        e.preventDefault();
+        let userEmail = userEmailInput.value.trim();
+        let userPassword = userPasswordInput.value.trim();
+        if(userEmail&userPassword){
+        const url = 'https://past-papers-api.onrender.com/auth/login'
+        const options = {
+            method:"POST",
+            headers: {
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                "email":userEmail,
+                "password":userPassword
+            })   
+        }
+        fetch(url,options)
+        .then(response=>{
+            if(response.ok){
+                sessionStorage.setItem('isLogged',true);
+            }
+            return response.json();
+        })
+        .then(data=>{
             console.log(data);
             window.location.reload();
         })

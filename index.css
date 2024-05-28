@@ -7,8 +7,9 @@ body{
     background-color: #000022;
 }
 #contacts{
+    margin: 0;
     background-color: #040F16;
-    padding: 0 10px;
+    padding: 5px 5px;
     font-weight: 700;
     color: #fff;
 }
@@ -72,6 +73,7 @@ body{
     color: #fff;
 }
 #add-cont{
+    /* font-size: .1vw; */
     position: fixed;
     bottom: 10vh;
     right: 5vw;
@@ -88,9 +90,8 @@ body{
 /* .hidden-form{
     display: none;
 } */
-#add-item-form-cont{
+#add-item-form-cont,#login-form-cont{
     display: none;
-   
     position: fixed;
     top: 0;
     left: 0;
@@ -99,7 +100,7 @@ body{
     background-color: rgba(0, 0, 0, 0.5); /* semi-transparent black background */
     backdrop-filter: blur(5px); /* blur effect */
 }
-#add-folder-form{
+#add-folder-form,#login-form{
     /* display: none; */
     color: #fff;
     position: absolute;
@@ -111,11 +112,11 @@ body{
     width: 300px;
     padding: 2vh ;
 }
-#folder-name{
+#folder-name,#user-email,#user-password{
     width: 80%;
     /* align-self: center; */
 }
-#add-item-btn{
+#add-item-btn,#login-btn{
     margin-top: 5vh;
     width:fit-content;
     padding: 1%;
@@ -152,6 +153,12 @@ body{
 #main-cont{
     font-size: 90%;
 }
+#add-cont{
+    font-size: 8vw;
+    width:fit-content;
+    height: fit-content;
+    padding: 4%;
+}
 }
 
 .loading-container {
@@ -173,7 +180,6 @@ border-top-color: transparent;
 animation: spin 1s linear infinite;
 
 }
-
 @keyframes spin {
 to {
 transform: rotate(360deg);
