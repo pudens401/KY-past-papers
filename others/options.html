@@ -4,148 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Options</title>
-    <style>
-        /*000022 001242 0094C6 ; oxford_blue penn_blue blue*/
-        body{
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            background-color: #000022;
-        }
-        #contacts{
-            background-color: #040F16;
-            padding: 0 10px;
-            font-weight: 700;
-            color: #fff;
-        }
-        #header-elements{
-            padding: 0% 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            border-bottom: #fff solid 1px;
-        }
-        #logo-cont{
-            color:#fff; 
-        }
-        #personalise-cont{
-            display: flex;
-            justify-content: space-between;
-            width: fit-content;
-            padding: 10px;
-            height: 100%;
-            width: 40%;
-            align-items: baseline;
-        }
-        .buttons{
-            width: fit-content;
-            background-color:#005E7C;
-            color: #fff;
-            padding: 10px;
-            outline: none;
-            border: none;
-            border-radius: 5%;
-        }
-        #nav-menu{
-            display: block;
-            margin:2vh 1vh 0vh 1vh;
-            font-size: 16px;
-        }
-        .nav-menu-btn{
-            color:#ffffff9d;
-        }
-        .nav-menu-btn:hover{
-            color:#0094C6;
-            text-decoration: underline;
-            cursor:pointer;
-        }
-        .nav-menu-separator{
-            color: #fff;       
-        }
-        #search-bar-cont{
-            width: 85%;
-            display: flex;
-            justify-content: center;
-        }
-        #search-query{
-            padding: 9px 5px;
-            width: 70%;
-        }
-        .page-title{
-            color: #fff;
-        }
-
-        #main-cont{
-            margin-top: 6vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            height: fit-content;
-        }
-        #page-items{
-            display: flex;
-            flex-direction: column;
-        }
-        .page-item{
-            background-color: #0094C6;
-            padding: 10px 5px 10px 20px;
-            margin: 5px 0px;
-            width: 100%;
-            color: #fff;
-        }
-
-        @media screen and (max-width: 600px) {
-           #header-elements{
-            display: flex;
-            flex-direction: column;
-            border: none;
-           }
-           #logo-cont{
-            font-size: 70%;
-            width: fit-content;
-            margin: auto;
-            
-           }
-           #personalise-cont{
-            display: flex;
-            width: 100%;
-            padding: 1px;
-            height: 100%;
-            align-items: center;
-            margin: auto;
-        }
-        #main-cont{
-            font-size: 90%;
-        }
-        }
-.loading-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 10vh;
-  color: #0094C6;
-}
-.loading {
-  display: inline-block;
-  width: 2px;
-  height: 2px;
-  border-radius: 50%;
-  border: 2px solid #0094C6;
-  border-top-color: transparent;
-  animation: spin 1s linear infinite;
-  
-}
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}     
-        
-
-    </style>
-</head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="style.css">
+    </head>
 <body>
     <div id="contacts">
         <p>CONTACT US: +250728043519</p>
@@ -170,7 +31,7 @@
             <span class="nav-menu-btn" id="dpt-nav-btn">Department</span>
         </div>
         <div class="page-title-cont">
-            <h2 class="page-title">OPTIONS</h2>
+            <h2 class="page-title" id="page-title-1">OPTIONS</h2>
         </div>
        
         <div class="loading-container">
@@ -190,6 +51,19 @@
             <div class="page-item">
                 HVAC TECHNOLOGY
             </div>
+        </div>
+        <div id="add-cont">
+            <i class="fa-solid fa-plus"></i>
+        </div>
+    
+        <div class="hidden-form" id="add-item-form-cont">
+            <form action="" name="add-folder" id="add-folder-form">
+                <p id="cancel">cancel</p>
+                <h3 id="add-header">ADD FOLDER</h3>
+                <label for="folder-name" id="folder-name-label">Folder name</label>
+                <input type="text" id="folder-name">
+                <button id="add-item-btn">Confirm</button>
+            </form>
         </div>
     </div>
 </body>
@@ -257,5 +131,48 @@
         sessionStorage.setItem('optionName',opt.name);
         window.location.href = './years.html'
     }
+
+    const addItemForm = document.getElementById("add-item-form-cont");
+    const addItemCont = document.getElementById("add-cont");
+    addItemCont.addEventListener("click",(e)=>{
+        e.preventDefault();
+        addItemForm.style.display = 'block';
+    })
+
+    const cancelBtn = document.getElementById('cancel');
+    const header = document.getElementById('add-header');
+    const pageTitle = document.getElementById('page-title-1');
+    header.textContent = `ADD ${pageTitle.textContent.split('S')[0]}`;
+    const folderNameLabel = document.getElementById("folder-name-label");
+    folderNameLabel.textContent = `${pageTitle.textContent.split('S')[0].toLowerCase()} name`
+    cancelBtn.addEventListener('click',()=>{
+        addItemForm.style.display = 'none';
+    });
+    const folderNameInput = document.getElementById('folder-name');
+    const addItemBtn = document.getElementById('add-item-btn');
+    addItemBtn.addEventListener("click",(e)=>{
+        e.preventDefault();
+        let folderName = folderNameInput.value.trim();
+        if(folderName){
+        const url = 'https://past-papers-api.onrender.com/newFolder'
+        const options = {
+            method:"POST",
+            headers: {
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                "name":folderName.toUpperCase(),
+                "parentId":sessionStorage.getItem('departmentLink')
+            })   
+        }
+        fetch(url,options)
+        .then(response=>response.json())
+        .then(data=>{
+            alert("Option added!");
+            console.log(data);
+            window.location.reload();
+        })
+        }
+    })
 </script>
 </html>
