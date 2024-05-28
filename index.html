@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Departments</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         /*000022 001242 0094C6 ; oxford_blue penn_blue blue*/
         body{
@@ -77,6 +78,56 @@
             margin: 5px 0px;
             width: 100%;
             color: #fff;
+        }
+        #add-cont{
+            position: fixed;
+            bottom: 10vh;
+            right: 5vw;
+            background-color: #fff;
+            color: #0094C6;
+            width:fit-content;
+            height: fit-content;
+            border-radius: 50%;
+            align-self: center;
+            text-align: center;
+            padding: 1%;
+            border: solid .5px #fff;   
+        }
+        /* .hidden-form{
+            display: none;
+        } */
+        #add-item-form-cont{
+            display: none;
+            background-color: #0094C6;
+            width: 30%;
+            position: fixed;
+            bottom: 10vh;
+            right: 5vw;
+        }
+        #add-folder-form{
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            color: #fff;
+            padding: 5%;
+            padding-bottom: 10%;
+        }
+        #folder-name{
+            width: 80%;
+            /* align-self: center; */
+        }
+        #add-item-btn{
+            margin-top: 5vh;
+            width:fit-content;
+            padding: 1%;
+            align-self: center;
+        }
+        #cancel{
+            position: absolute;
+            top: 1%;
+            right: 1%;
+            color: #fff;
+            text-decoration: underline;
         }
 
         @media screen and (max-width: 600px) {
@@ -157,7 +208,7 @@
         </div>
         <div id="main-cont">
             <div class="page-title-cont">
-                <h2 class="page-title">DEPARTMENTS</h2>
+                <h2 class="page-title" id="page-title-1">DEPARTMENTS</h2>
             </div>
             <div id="page-items">
                 <div class="page-item">
@@ -174,10 +225,25 @@
                 </div>
             </div>
         </div>
+        <div id="add-cont">
+            <i class="fa-solid fa-plus"></i>
+        </div>
+    
+        <div class="hidden-form" id="add-item-form-cont">
+            <form action="" name="add-folder" id="add-folder-form">
+                <p id="cancel">cancel</p>
+                <h3 id="add-header">ADD FOLDER</h3>
+                <label for="folder-name" id="folder-name-label">Folder name</label>
+                <input type="text" id="folder-name">
+                <button id="add-item-btn">Confirm</button>
+            </form>
+        </div>
     </div>
+    
 </body>
 <script>
     const content = document.getElementById('content');
+    let baseFolder;
     window.onload = ()=>{
         content.style.display = "none" ;
     }
@@ -204,6 +270,11 @@
         const itemsCont = document.getElementById('page-items');
         itemsCont.innerHTML = "";
         data.forEach(dpt => {
+            if(!baseFolder){
+                baseFolder = dpt.baseFolder;
+                console.log(baseFolder)
+                sessionStorage.setItem("baseFolder",dpt.baseFolder);
+            }
             const listItem = document.createElement('div');
             listItem.classList.add("page-item");
             listItem.innerText = dpt.name;
@@ -222,5 +293,51 @@
         sessionStorage.setItem('departmentName',dpt.name);
         window.location.href = './others/options.html'
     }
+
+    const addItemForm = document.getElementById("add-item-form-cont");
+    const addItemCont = document.getElementById("add-cont");
+    addItemCont.addEventListener("click",(e)=>{
+        e.preventDefault();
+        addItemForm.style.display = 'block';
+    })
+
+    const cancelBtn = document.getElementById('cancel');
+    const header = document.getElementById('add-header');
+    const pageTitle = document.getElementById('page-title-1');
+    header.textContent = `ADD ${pageTitle.textContent.split('S')[0]}`;
+    const folderNameLabel = document.getElementById("folder-name-label");
+    folderNameLabel.textContent = `${pageTitle.textContent.split('S')[0].toLowerCase()} name`
+    cancelBtn.addEventListener('click',()=>{
+        addItemForm.style.display = 'none';
+    });
+    const folderNameInput = document.getElementById('folder-name');
+    const addItemBtn = document.getElementById('add-item-btn');
+    addItemBtn.addEventListener("click",(e)=>{
+        e.preventDefault();
+        let folderName = folderNameInput.value.trim();
+        console.log(folderName);
+        console.log(baseFolder);
+        if(folderName){
+        const url = 'https://past-papers-api.onrender.com/newFolder'
+        const options = {
+            method:"POST",
+            headers: {
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                "name":folderName.toUpperCase(),
+                "parentId":baseFolder
+            })   
+        }
+        fetch(url,options)
+        .then(response=>response.json())
+        .then(data=>{
+            alert("Department added!");
+            console.log(data);
+            // window.location.reload();
+        })
+        }
+    })
+
 </script>
 </html>
