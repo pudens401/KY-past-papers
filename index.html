@@ -85,8 +85,8 @@
 <script>
     const isLogged = sessionStorage.getItem('isLogged')
     let localHost = 'http://127.0.0.1:8000'
+    let hostedUrl = "https://past-papers-api.onrender.com"
     const content = document.getElementById('content');
-    let urls = ['https://past-papers-api.onrender.com','http://127.0.0.1:8000']
     let baseFolder;
     window.onload = ()=>{
         content.style.display = "none" ;
@@ -97,7 +97,7 @@
     })
     getDepartments();
     function getDepartments(){
-        const url = 'https://past-papers-api.onrender.com/departments'
+        const url = `${hostedUrl}/departments`
         const options = {
             method:"GET"
         }
@@ -162,7 +162,7 @@
         console.log(folderName);
         console.log(baseFolder);
         if(folderName){
-        const url = 'https://past-papers-api.onrender.com/newFolder'
+        const url = `${hostedUrl}/newFolder`   
         const options = {
             method:"POST",
             headers: {
@@ -193,7 +193,7 @@
         if(!isLogged){
             loginFormCont.style.display = 'block';
         }else if(isLogged){
-            const url = `${localHost}/auth/logout`
+            const url = `${hostedUrl}/auth/logout`
             const options = {
                 method:"POST",
                 credentials:"include" 
@@ -231,7 +231,7 @@
         let userEmail = userEmailInput.value.trim();
         let userPassword = userPasswordInput.value.trim();
         if(userEmail&&userPassword){
-        const url = `${localHost}/auth/login`
+        const url = `${hostedUrl}/auth/login`
         const options = {
             method:"POST",
             headers: {
@@ -251,8 +251,12 @@
             return response.json();
         })
         .then(data=>{
+            console.log(`cookie are`)
             console.log(data);
             console.log(document.cookie)
+            setTimeout(()=>{
+                console.log(document.cookie)
+            },5000);
             // window.location.reload();
         })
         }else{
@@ -261,5 +265,6 @@
         }
     })
 
+    
 </script>
 </html>
