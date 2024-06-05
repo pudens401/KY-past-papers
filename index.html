@@ -64,7 +64,7 @@
 
         <div class="hidden-form" id="login-form-cont">
             <form action="" name="login-form" id="login-form">
-                <p id="cancel">cancel</p>
+                <p id="cancel-1">cancel</p>
                 <h3 id="form-title">LOGIN</h3>
                 <div id="input-wrapper-1">
                     <label for="user-email" id="user-email-label">Username</label>
@@ -83,7 +83,10 @@
     
 </body>
 <script>
+    const isLogged = sessionStorage.getItem('isLogged')
+    let localHost = 'http://127.0.0.1:8000'
     const content = document.getElementById('content');
+    let urls = ['https://past-papers-api.onrender.com','http://127.0.0.1:8000']
     let baseFolder;
     window.onload = ()=>{
         content.style.display = "none" ;
@@ -168,7 +171,8 @@
             body:JSON.stringify({
                 "name":folderName.toUpperCase(),
                 "parentId":baseFolder
-            })   
+            }),
+            credentials:'include' 
         }
         fetch(url,options)
         .then(response=>response.json())
@@ -181,6 +185,44 @@
     })
 
     
+    
+    const loginFormCont = document.getElementById("login-form-cont");
+    const loginFormDrop = document.getElementById("login-button");
+    loginFormDrop.addEventListener("click",(e)=>{
+        e.preventDefault();
+        if(!isLogged){
+            loginFormCont.style.display = 'block';
+        }else if(isLogged){
+            const url = `${localHost}/auth/logout`
+            const options = {
+                method:"POST",
+                credentials:"include" 
+            }
+            fetch(url,options)
+            .then(response=>{
+                if(response.ok){
+                    return response.json()
+                }else{
+                    alert('logout error')
+                    
+                    return response.json()
+                }
+            })
+            .then(data=>{
+                sessionStorage.setItem('isLogged',false)
+                console.log(data)
+                // window.location.reload();
+            })
+        }
+        
+    })
+    loginFormDrop.innerText = isLogged?"Logout":"Login"
+    const loginCancelBtn = document.getElementById('cancel-1');
+    loginCancelBtn.addEventListener('click',()=>{
+        loginFormCont.style.display = 'none';
+    });
+
+    
     const userEmailInput = document.getElementById('user-email');
     const userPasswordInput = document.getElementById('user-password');
     const loginBtn = document.getElementById('login-btn');
@@ -188,8 +230,8 @@
         e.preventDefault();
         let userEmail = userEmailInput.value.trim();
         let userPassword = userPasswordInput.value.trim();
-        if(userEmail&userPassword){
-        const url = 'https://past-papers-api.onrender.com/auth/login'
+        if(userEmail&&userPassword){
+        const url = `${localHost}/auth/login`
         const options = {
             method:"POST",
             headers: {
@@ -198,7 +240,8 @@
             body:JSON.stringify({
                 "email":userEmail,
                 "password":userPassword
-            })   
+            }),
+            credentials:"include"
         }
         fetch(url,options)
         .then(response=>{
@@ -209,8 +252,12 @@
         })
         .then(data=>{
             console.log(data);
-            window.location.reload();
+            console.log(document.cookie)
+            // window.location.reload();
         })
+        }else{
+            alert('error');
+            console.log(`${userEmail},${userPassword}`)
         }
     })
 
