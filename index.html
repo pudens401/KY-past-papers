@@ -83,8 +83,7 @@
     
 </body>
 <script>
-    const isLogged = sessionStorage.getItem('isLogged')
-    let localHost = 'http://127.0.0.1:8000'
+    let localUrl = 'http://127.0.0.1:8000'
     let hostedUrl = "https://past-papers-api.onrender.com"
     const content = document.getElementById('content');
     let baseFolder;
@@ -185,14 +184,16 @@
     })
 
     
-    
+    let isLogged = sessionStorage.getItem('isLogged')
     const loginFormCont = document.getElementById("login-form-cont");
-    const loginFormDrop = document.getElementById("login-button");
+    let loginFormDrop = document.getElementById("login-button");
+    loginFormDrop.innerText = isLogged==='false'||!isLogged?"Login":"Logout"
     loginFormDrop.addEventListener("click",(e)=>{
+        isLogged = sessionStorage.getItem('isLogged')
         e.preventDefault();
-        if(!isLogged){
+        if(!isLogged||isLogged==='false'){
             loginFormCont.style.display = 'block';
-        }else if(isLogged){
+        }else if(isLogged==='true'){
             const url = `${hostedUrl}/auth/logout`
             const options = {
                 method:"POST",
@@ -201,10 +202,11 @@
             fetch(url,options)
             .then(response=>{
                 if(response.ok){
+                    sessionStorage.setItem('isLogged','false')
+                    window.location.reload();
                     return response.json()
                 }else{
                     alert('logout error')
-                    
                     return response.json()
                 }
             })
@@ -216,7 +218,8 @@
         }
         
     })
-    loginFormDrop.innerText = isLogged?"Logout":"Login"
+    
+    
     const loginCancelBtn = document.getElementById('cancel-1');
     loginCancelBtn.addEventListener('click',()=>{
         loginFormCont.style.display = 'none';
@@ -246,7 +249,7 @@
         fetch(url,options)
         .then(response=>{
             if(response.ok){
-                sessionStorage.setItem('isLogged',true);
+                sessionStorage.setItem('isLogged','true');
             }
             return response.json();
         })

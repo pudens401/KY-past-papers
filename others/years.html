@@ -65,9 +65,29 @@
                 <button id="add-item-btn">Confirm</button>
             </form>
         </div>
+
+        <div class="hidden-form" id="login-form-cont">
+            <form action="" name="login-form" id="login-form">
+                <p id="cancel-1">cancel</p>
+                <h3 id="form-title">LOGIN</h3>
+                <div id="input-wrapper-1">
+                    <label for="user-email" id="user-email-label">Username</label>
+                    <input type="text" id="user-email">
+                </div>
+                <div id="input-wrapper-1">
+                    <label for="user-password" id="user-password-label">Password</label>
+                    <input type="password" id="user-password">
+                </div>
+                <p id="request-account">New here?<span>request account</span></p>
+                <button id="login-btn">Login</button>
+                <p>Forgot password?</p>
+            </form>
+        </div>
     </div>
 </body>
 <script>
+    let localUrl = 'http://127.0.0.1:8000'
+    let hostedUrl = "https://past-papers-api.onrender.com"
     window.onload = ()=>{
         const itemsCont = document.getElementById('page-items');
         itemsCont.style.display = "none" ;
@@ -100,7 +120,7 @@
     getYears();
     function getYears(){
         const link = sessionStorage.getItem('optionLink');
-        const url = `https://past-papers-api.onrender.com/folders/${link}`
+        const url = `${hostedUrl}/folders/${link}`
         const options = {
             method:"GET"
         }
@@ -161,7 +181,7 @@
         e.preventDefault();
         let folderName = folderNameInput.value.trim();
         if(folderName){
-        const url = 'https://past-papers-api.onrender.com/newFolder'
+        const url = `${hostedUrl}/newFolder` 
         const options = {
             method:"POST",
             headers: {
@@ -170,7 +190,8 @@
             body:JSON.stringify({
                 "name":folderName.toUpperCase(),
                 "parentId":sessionStorage.getItem('optionLink')
-            })   
+            }),
+            credentials:"include"  
         }
         fetch(url,options)
         .then(response=>response.json())
@@ -181,5 +202,91 @@
         })
         }
     })
+
+    let isLogged = sessionStorage.getItem('isLogged')
+    const loginFormCont = document.getElementById("login-form-cont");
+    let loginFormDrop = document.getElementById("login-button");
+    loginFormDrop.innerText = isLogged==='false'||!isLogged?"Login":"Logout"
+    loginFormDrop.addEventListener("click",(e)=>{
+        isLogged = sessionStorage.getItem('isLogged')
+        e.preventDefault();
+        if(!isLogged||isLogged==='false'){
+            loginFormCont.style.display = 'block';
+        }else if(isLogged==='true'){
+            const url = `${hostedUrl}/auth/logout`
+            const options = {
+                method:"POST",
+                credentials:"include" 
+            }
+            fetch(url,options)
+            .then(response=>{
+                if(response.ok){
+                    sessionStorage.setItem('isLogged','false')
+                    window.location.reload();
+                    return response.json()
+                }else{
+                    alert('logout error')
+                    return response.json()
+                }
+            })
+            .then(data=>{
+                sessionStorage.setItem('isLogged',false)
+                console.log(data)
+                // window.location.reload();
+            })
+        }
+        
+    })
+    
+    
+    const loginCancelBtn = document.getElementById('cancel-1');
+    loginCancelBtn.addEventListener('click',()=>{
+        loginFormCont.style.display = 'none';
+    });
+
+    
+    const userEmailInput = document.getElementById('user-email');
+    const userPasswordInput = document.getElementById('user-password');
+    const loginBtn = document.getElementById('login-btn');
+    loginBtn.addEventListener("click",(e)=>{
+        e.preventDefault();
+        let userEmail = userEmailInput.value.trim();
+        let userPassword = userPasswordInput.value.trim();
+        if(userEmail&&userPassword){
+        const url = `${hostedUrl}/auth/login`
+        const options = {
+            method:"POST",
+            headers: {
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                "email":userEmail,
+                "password":userPassword
+            }),
+            credentials:"include"
+        }
+        fetch(url,options)
+        .then(response=>{
+            if(response.ok){
+                sessionStorage.setItem('isLogged','true');
+            }
+            return response.json();
+        })
+        .then(data=>{
+            console.log(`cookie are`)
+            console.log(data);
+            console.log(document.cookie)
+            setTimeout(()=>{
+                console.log(document.cookie)
+            },5000);
+            // window.location.reload();
+        })
+        }else{
+            alert('error');
+            console.log(`${userEmail},${userPassword}`)
+        }
+    })
+
+
 </script>
 </html>
