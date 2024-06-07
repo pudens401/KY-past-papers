@@ -84,6 +84,7 @@
                 <p>Forgot password?</p>
             </form>
         </div>
+        <div class="success-cont" id="message-cont"></div>
     </div>
 </body>
 <script>
@@ -120,9 +121,15 @@
         fetch(url,options)
         .then(response=>response.json())
         .then(data=>{
-            document.querySelector('.loading-container').style.display = 'none';
-            document.getElementById('page-items').style.display = 'block';
-            displayOptions(data.data);
+            if(data.success){
+                document.querySelector('.loading-container').style.display = 'none';
+                document.getElementById('page-items').style.display = 'block';
+                setMessage(data.success,data.message);
+                displayOptions(data.data);
+            }else{
+                setMessage(data.success,data.message);
+            }
+            
         })
     }
 
@@ -189,9 +196,14 @@
         fetch(url,options)
         .then(response=>response.json())
         .then(data=>{
-            alert("Option added!");
-            console.log(data);
-            window.location.reload();
+            if(data.success){
+                setMessage(data.success,data.message)
+                setTimeout(()=>{
+                    window.location.reload();
+                },1000)   
+            }else{
+                setMessage(data.success,data.message)
+            }
         })
         }
     })
@@ -200,7 +212,7 @@
     const loginFormCont = document.getElementById("login-form-cont");
     let loginFormDrop = document.getElementById("login-button");
     loginFormDrop.innerText = isLogged==='false'||!isLogged?"Login":"Logout"
-    loginFormDrop.addEventListener("click",(e)=>{
+    loginFormDrop.addEventListener("click",async (e)=>{
         isLogged = sessionStorage.getItem('isLogged')
         e.preventDefault();
         if(!isLogged||isLogged==='false'){
@@ -211,25 +223,26 @@
                 method:"POST",
                 credentials:"include" 
             }
-            fetch(url,options)
+            await fetch(url,options)
             .then(response=>{
-                if(response.ok){
-                    sessionStorage.setItem('isLogged','false')
-                    window.location.reload();
                     return response.json()
-                }else{
-                    alert('logout error')
-                    return response.json()
-                }
+
             })
             .then(data=>{
-                sessionStorage.setItem('isLogged',false)
-                console.log(data)
-                // window.location.reload();
+                if(data.success){
+                    sessionStorage.setItem('isLogged',false)
+                    setMessage(data.success,data.message)
+                    window.location.reload()
+                    return
+            }else{
+                setMessage(data.success,data.message)
+                return
+            }
             })
         }
         
     })
+    
     
     const loginCancelBtn = document.getElementById('cancel-1');
     loginCancelBtn.addEventListener('click',()=>{
@@ -240,7 +253,7 @@
     const userEmailInput = document.getElementById('user-email');
     const userPasswordInput = document.getElementById('user-password');
     const loginBtn = document.getElementById('login-btn');
-    loginBtn.addEventListener("click",(e)=>{
+    loginBtn.addEventListener("click",async (e)=>{
         e.preventDefault();
         let userEmail = userEmailInput.value.trim();
         let userPassword = userPasswordInput.value.trim();
@@ -249,7 +262,7 @@
         const options = {
             method:"POST",
             headers: {
-                "Content-Type":"application/json",
+                "Content-Type":"application/json"
             },
             body:JSON.stringify({
                 "email":userEmail,
@@ -257,27 +270,43 @@
             }),
             credentials:"include"
         }
-        fetch(url,options)
+        await fetch(url,options)
         .then(response=>{
             if(response.ok){
-                sessionStorage.setItem('isLogged',true);
+                sessionStorage.setItem('isLogged','true');
             }
             return response.json();
         })
         .then(data=>{
-            console.log(`cookie are`)
-            console.log(data);
-            console.log(document.cookie)
-            setTimeout(()=>{
-                console.log(document.cookie)
-            },5000);
-            // window.location.reload();
+            if(data.success){
+                setMessage(data.success,data.message)
+                window.location.reload()
+                return
+            }else{
+                setMessage(data.success,data.message)
+                return
+            }
         })
         }else{
-            alert('error');
-            console.log(`${userEmail},${userPassword}`)
+            setMessage(false,"Missing values")
         }
     })
+
+    async function setMessage(status,message){
+        let messageContainer = document.getElementById("message-cont")
+        messageContainer.innerText = message
+        let messageType = status?"success-cont":"error-cont"
+        let classlist = messageContainer.classList
+        classlist.forEach((el)=>{
+            messageContainer.classList.remove(el)
+        })
+        messageContainer.classList.add(messageType);
+        messageContainer.style.display = 'block'
+        setTimeout(()=>{
+            messageContainer.style.display = 'none'
+        },5000)
+        return
+    }
 
 </script>
 </html>

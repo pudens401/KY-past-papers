@@ -183,6 +183,29 @@
     padding: 1vh;
 }
 
+#message-cont{
+    width: 35%;
+    display: none;
+    margin: auto;
+    text-align: center;
+    padding: 1vw;
+    font-size: 85%;
+    position: fixed;
+    top: 1%;
+    right: 30%;  
+    font-weight: 700; 
+}
+
+.error-cont{
+    background-color: rgb(253, 185, 185);
+    color: rgb(255, 60, 60);
+}
+.success-cont{
+    background-color: rgb(158, 252, 158);
+    color:green;
+}
+
+
 
 @media screen and (max-width: 600px) {
    #header-elements{
