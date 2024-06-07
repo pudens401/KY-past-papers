@@ -22,6 +22,7 @@ body{
 }
 #logo-cont{
     color:#fff; 
+    cursor: pointer;
 }
 #personalise-cont{
     display: flex;
@@ -40,6 +41,7 @@ body{
     outline: none;
     border: none;
     border-radius: 5%;
+    cursor: pointer;
 }
 #search-bar-cont{
     width: 85%;
@@ -71,9 +73,9 @@ body{
     margin: 5px 0px;
     width: 100%;
     color: #fff;
+    cursor: pointer;
 }
 #add-cont{
-    /* font-size: .1vw; */
     position: fixed;
     bottom: 10vh;
     right: 5vw;
@@ -85,11 +87,10 @@ body{
     align-self: center;
     text-align: center;
     padding: 1%;
-    border: solid .5px #fff;   
+    border: solid .5px #fff;  
+    cursor: pointer; 
 }
-/* .hidden-form{
-    display: none;
-} */
+
 #add-item-form-cont,#login-form-cont{
     display: none;
     position: fixed;
@@ -101,7 +102,6 @@ body{
     backdrop-filter: blur(5px); /* blur effect */
 }
 #add-folder-form,#login-form{
-    /* display: none; */
     color: #fff;
     position: absolute;
     top: 50%;
@@ -114,7 +114,6 @@ body{
 }
 #folder-name,#user-email,#user-password{
     width: 80%;
-    /* align-self: center; */
 }
 #add-item-btn,#login-btn{
     margin-top: 5vh;
