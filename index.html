@@ -99,7 +99,7 @@
     })
     getDepartments();
     async function getDepartments(){
-        const url = `${hostedUrl}/departments`
+        const url = `${localUrl}/departments`
         const options = {
             method:"GET"
         }
@@ -169,7 +169,7 @@
         console.log(folderName);
         console.log(baseFolder);
         if(folderName){
-        const url = `${hostedUrl}/newFolder`   
+        const url = `${localUrl}/newFolder`   
         const options = {
             method:"POST",
             headers: {
@@ -177,7 +177,8 @@
             },
             body:JSON.stringify({
                 "name":folderName.toUpperCase(),
-                "parentId":baseFolder
+                "parentId":baseFolder,
+                sessionToken:localStorage.getItem("sessionToken")
             }),
             credentials:'include' 
         }
@@ -204,15 +205,23 @@
     loginFormDrop.innerText = isLogged==='false'||!isLogged?"Login":"Logout"
     loginFormDrop.addEventListener("click",async (e)=>{
         isLogged = sessionStorage.getItem('isLogged')
+        let sessionToken = localStorage.getItem("sessionToken")
+        console.log(sessionToken)
         e.preventDefault();
         if(!isLogged||isLogged==='false'){
             loginFormCont.style.display = 'block';
         }else if(isLogged==='true'){
-            const url = `${hostedUrl}/auth/logout`
+            const url = `${localUrl}/auth/logout`
             const options = {
                 method:"POST",
-                credentials:"include" 
+                headers: {
+                "Content-Type":"application/json"
+                },
+                body:JSON.stringify({
+                    sessionToken:sessionToken
+                })
             }
+            console.log(options)
             await fetch(url,options)
             .then(response=>{
                     return response.json()
@@ -221,10 +230,12 @@
             .then(data=>{
                 if(data.success){
                     sessionStorage.setItem('isLogged',false)
+                    localStorage.removeItem('sessionToken')
                     setMessage(data.success,data.message)
                     window.location.reload()
                     return
             }else{
+                console.log(data)
                 setMessage(data.success,data.message)
                 return
             }
@@ -248,7 +259,7 @@
         let userEmail = userEmailInput.value.trim();
         let userPassword = userPasswordInput.value.trim();
         if(userEmail&&userPassword){
-        const url = `${hostedUrl}/auth/login`
+        const url = `${localUrl}/auth/login`
         const options = {
             method:"POST",
             headers: {
@@ -269,6 +280,7 @@
         })
         .then(data=>{
             if(data.success){
+                localStorage.setItem('sessionToken',data.sessionToken);
                 setMessage(data.success,data.message)
                 window.location.reload()
                 return

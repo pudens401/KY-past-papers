@@ -204,7 +204,7 @@
         formData.append("file",fileData)
         formData.append("fileName",fileName)
         formData.append("folderId",sessionStorage.getItem('moduleLink'))
-        
+        formData.append("sessionToken",localStorage.getItem("sessionToken"))
         if(fileName&&fileData){
         const url = `${hostedUrl}/newFile`
         const options = {
@@ -233,6 +233,8 @@
     loginFormDrop.innerText = isLogged==='false'||!isLogged?"Login":"Logout"
     loginFormDrop.addEventListener("click",async (e)=>{
         isLogged = sessionStorage.getItem('isLogged')
+        let sessionToken = localStorage.getItem("sessionToken")
+        console.log(sessionToken)
         e.preventDefault();
         if(!isLogged||isLogged==='false'){
             loginFormCont.style.display = 'block';
@@ -240,8 +242,14 @@
             const url = `${hostedUrl}/auth/logout`
             const options = {
                 method:"POST",
-                credentials:"include" 
+                headers: {
+                "Content-Type":"application/json"
+                },
+                body:JSON.stringify({
+                    sessionToken:sessionToken
+                })
             }
+            console.log(options)
             await fetch(url,options)
             .then(response=>{
                     return response.json()
@@ -250,10 +258,12 @@
             .then(data=>{
                 if(data.success){
                     sessionStorage.setItem('isLogged',false)
+                    localStorage.removeItem('sessionToken')
                     setMessage(data.success,data.message)
                     window.location.reload()
                     return
             }else{
+                console.log(data)
                 setMessage(data.success,data.message)
                 return
             }
@@ -298,6 +308,7 @@
         })
         .then(data=>{
             if(data.success){
+                localStorage.setItem('sessionToken',data.sessionToken);
                 setMessage(data.success,data.message)
                 window.location.reload()
                 return
