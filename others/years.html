@@ -254,7 +254,8 @@
                     window.location.reload()
                     return
             }else{
-                console.log(data)
+                sessionStorage.setItem('isLogged',false)
+                localStorage.removeItem('sessionToken')
                 setMessage(data.success,data.message)
                 return
             }
